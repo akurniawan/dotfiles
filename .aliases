@@ -1,0 +1,68 @@
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias run-this-jupyter="jupyter lab --notebook-dir=. --ip=0.0.0.0 --no-browser"
+alias rsh="source ~/.zshrc"
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
+
+# Get updates for softwares installed by brew
+alias update="brew update && brew upgrade && brew upgrade --cask && brew cleanup -s"
+
+# Conda
+alias cupdate="conda update -n base -c defaults conda -y"
+alias update_env="conda update --all -y"
+alias deactivate="conda deactivate"
+alias envs="conda env list"
+alias pkgs="conda list"
+function workon {
+    default_envdir="${HOME}/opt/miniconda3/envs"
+    env_name=$1
+    envdir="${default_envdir}/${env_name}"
+    default_pythonver="3.8"
+    pythonver=${2:-$default_pythonver}
+
+    if [ ! -d "${envdir}" ]; then
+        conda create -n $env_name python=$pythonver pylint flake8 rope black ipython jupyter jupyterlab ipykernel -y
+        echo -e "\x1b[38;5;2m✔ Created virtualenv $env_name\x1b[0m"
+    fi
+    conda activate $env_name
+    python --version
+}
+
+function remenv {
+    env_name=$1
+    if [[ "$env_name" == "$CONDA_DEFAULT_ENV" ]]; then
+        deactivate
+    fi
+    conda remove -n $env_name --all -y
+}
+
+# Print each PATH entry on a separate line
+alias path="echo -e ${PATH//:/\\n}"
+
+# Ping google
+alias tc="ping google.com"
+
+# Confirmation
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
+
+# Resume wget by default
+alias wget='wget -c'
+
+# Change directory & list files 
+function cl() {
+   cd $1
+   ls -la
+}
